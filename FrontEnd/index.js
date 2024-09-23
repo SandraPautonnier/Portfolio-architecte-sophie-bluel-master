@@ -1,12 +1,13 @@
 const gallery = document.querySelector(".gallery");
 
-
+//fonction asynchrone pour récupérer la liste des projets
 async function getWorks() {
   const reponse = await fetch("http://localhost:5678/api/works");
   const works = await reponse.json();
   //console.log(works);
   return works;
 }
+
 
 function displayWorks(category) {
   const works = getWorks();
@@ -34,12 +35,14 @@ function displayWorks(category) {
 }
 displayWorks();
 
+//fonction asynchrone pour récupérer les catégories
 async function getCategories() {
   const reponse = await fetch("http://localhost:5678/api/categories");
   const categories = await reponse.json();
   //console.log(works);
   return categories;
 }
+//Fonction pour créer le container et les boutons 
 const containerCategories = document.querySelector(".categories");
 function createCategoryButton(category) {
   const button = document.createElement("button");
@@ -48,6 +51,7 @@ function createCategoryButton(category) {
   button.addEventListener("click", () => handleSelectCategory(category));
   containerCategories.appendChild(button);
 }
+//fonction pour créer les filtres des catégories
 function createFilters() {
   const categories = getCategories();
   categories.then((data) => {
@@ -60,6 +64,7 @@ function createFilters() {
 }
 createFilters();
 
+//fonction pour ajouter et retirer la classe 'active'
 function handleSelectCategory(category) {
   gallery.innerHTML = "";
   displayWorks(category);
