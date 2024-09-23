@@ -1,5 +1,6 @@
 const gallery = document.querySelector(".gallery");
 
+
 async function getWorks() {
   const reponse = await fetch("http://localhost:5678/api/works");
   const works = await reponse.json();
@@ -62,12 +63,15 @@ createFilters();
 function handleSelectCategory(category) {
   gallery.innerHTML = "";
   displayWorks(category);
+  // Sélectionne tous les boutons de catégorie
   const buttons = document.querySelectorAll(".button-category");
-  for (let i = 0; i < buttons.length; i++) {
-    const button = buttons[i];
-    button.classList.toggle("active");
-    if (button.textContent === (category && category.name)) {
+  // Ajoute un écouteur d'événement pour chaque bouton
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      // Retire la classe 'active' de tous les boutons
+      buttons.forEach(btn => btn.classList.remove("active"));
+      // Ajoute la classe 'active' au bouton cliqué
       button.classList.add("active");
-    }
-  }
+    })
+  })
 }
