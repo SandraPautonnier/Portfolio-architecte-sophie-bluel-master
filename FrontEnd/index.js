@@ -8,7 +8,7 @@ async function getWorks() {
   return works;
 }
 
-
+//fonction pour faitre apparaître les différents projet avec les photos correspondantes
 function displayWorks(category) {
   const works = getWorks();
   works.then((data) => {
@@ -80,3 +80,5 @@ function handleSelectCategory(category) {
     })
   })
 }
+
+//fonction asynchrone pour permettre la connexion via le login et mot de passe
