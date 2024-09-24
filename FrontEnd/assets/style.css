@@ -49,7 +49,8 @@ table {
 /** end reset css**/
 body {
 	max-width: 1140px;
-	margin:auto;
+	margin: auto;
+	padding: 0;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background: #FFFEF8;
@@ -216,8 +217,16 @@ input[type="submit"]{
 }
 
 footer {
-	width: 100%;
+	width: 100vw;
 	background: white;
+	background-size: cover;
+	position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+	margin-bottom: -50vw;
+	
 }
 footer nav ul {
 	display: flex;
@@ -249,6 +258,7 @@ footer nav ul {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	margin-top: 0px;
+	font-size: 1.2em;
 }
 .login-form input {
 	border: none;
