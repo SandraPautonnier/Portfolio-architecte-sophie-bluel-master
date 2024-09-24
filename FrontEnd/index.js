@@ -1,87 +1,105 @@
 const gallery = document.querySelector(".gallery");
 
-//fonction asynchrone pour récupérer la liste des projets
+// Fonction asynchrone pour récupérer la liste des projets
 async function getWorks() {
   const reponse = await fetch("http://localhost:5678/api/works");
   const works = await reponse.json();
-  //console.log(works);
   return works;
 }
 
-//fonction pour faitre apparaître les différents projet avec les photos correspondantes
-function displayWorks(category) {
-  const works = getWorks();
-  works.then((data) => {
-    //console.log(data);
-    const filteredData = category
-      ? data.filter((work) => work.category.id === category.id)
-      : data;
-    console.log(filteredData);
+// Fonction pour faire apparaître les différents projets avec les photos correspondantes
+async function displayWorks(category) {
+  const works = await getWorks(); // Attendez que les travaux soient récupérés
+  const filteredData = category
+    ? works.filter((work) => work.category.id === category.id)
+    : works; // Si category est null ou undefined, utilisez tous les travaux
 
-    for (let i = 0; i < filteredData.length; i++) {
-      const work = filteredData[i];
-      const figureElement = document.createElement("figure");
-      const imageElement = document.createElement("img");
-      imageElement.src = work.imageUrl;
-      imageElement.alt = work.title;
-      const figCaptionElement = document.createElement("figcaption");
-      figCaptionElement.textContent = work.title;
+  gallery.innerHTML = ""; // Réinitialiser le contenu de la galerie
 
-      figureElement.appendChild(imageElement);
-      figureElement.appendChild(figCaptionElement);
-      gallery.appendChild(figureElement);
-    }
-  });
+  for (let i = 0; i < filteredData.length; i++) {
+    const work = filteredData[i];
+    const figureElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    imageElement.src = work.imageUrl;
+    imageElement.alt = work.title;
+    const figCaptionElement = document.createElement("figcaption");
+    figCaptionElement.textContent = work.title;
+
+    figureElement.appendChild(imageElement);
+    figureElement.appendChild(figCaptionElement);
+    gallery.appendChild(figureElement);
+  }
 }
-displayWorks();
 
-//fonction asynchrone pour récupérer les catégories
+// Fonction asynchrone pour récupérer les catégories
 async function getCategories() {
   const reponse = await fetch("http://localhost:5678/api/categories");
   const categories = await reponse.json();
-  //console.log(works);
   return categories;
 }
-//Fonction pour créer le container et les boutons
+
+// Fonction pour créer le container et les boutons
 const containerCategories = document.querySelector(".categories");
+
 function createCategoryButton(category) {
   const button = document.createElement("button");
-  button.className = `button-category ${!category ? "active" : ""}`;
+  button.className = `button-category ${!category ? "active" : ""}`; // Ajoutez "active" pour le bouton "Tous"
   button.textContent = category ? category.name : "Tous";
   button.addEventListener("click", () => handleSelectCategory(category));
   containerCategories.appendChild(button);
 }
-//fonction pour créer les filtres des catégories
-function createFilters() {
-  const categories = getCategories();
-  categories.then((data) => {
-    createCategoryButton();
-    for (let i = 0; i < data.length; i++) {
-      const category = data[i];
-      createCategoryButton(category);
-    }
-  });
+
+// Fonction pour créer les filtres des catégories
+async function createFilters() {
+  const categories = await getCategories();
+  createCategoryButton(); // Créez le bouton "Tous" sans catégorie
+
+  // Afficher les travaux pour "Tous" lors du chargement
+  await displayWorks(null); // Passer null pour afficher tous les travaux
+
+  // Maintenant, mettez le bouton "Tous" comme actif
+  const buttons = document.querySelectorAll(".button-category");
+  buttons[0].classList.add("active"); // Activez le premier bouton qui est "Tous"
+
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    createCategoryButton(category); // Créez les boutons pour chaque catégorie
+  }
 }
+
 createFilters();
 
-//fonction pour ajouter et retirer la classe 'active'
-function handleSelectCategory(category) {
-  gallery.innerHTML = "";
-  displayWorks(category);
-  // Sélectionne tous les boutons de catégorie
+async function handleSelectCategory(category) {
+  // Si "Tous" est sélectionné, passez null
+  if (!category) {
+    category = null; // "Tous" est représenté par null
+  }
+  
+  await displayWorks(category); // Affichez les travaux en fonction de la catégorie
+
   const buttons = document.querySelectorAll(".button-category");
-  // Ajoute un écouteur d'événement pour chaque bouton
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      // Retire la classe 'active' de tous les boutons
-      buttons.forEach((btn) => btn.classList.remove("active"));
-      // Ajoute la classe 'active' au bouton cliqué
+
+  // Retirer la classe 'active' de tous les boutons
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove("active");
+  }
+
+  // Ajouter la classe 'active' au bouton correspondant à la catégorie
+  for (let i = 0; i < buttons.length; i++) {
+    const button = buttons[i];
+
+    // Vérifiez si le bouton correspond à category.name ou s'il est le bouton "Tous"
+    if (!category && button.textContent === "Tous") { // Vérifiez si la catégorie est null (pour le bouton "Tous")
       button.classList.add("active");
-    });
-  });
+      break; // Sortir de la boucle une fois que le bon bouton est trouvé
+    } else if (button.textContent === category.name) {
+      button.classList.add("active");
+      break; // Sortir de la boucle une fois que le bon bouton est trouvé
+    }
+  }
 }
 
-// JavaScript pour ajouter automatiquement la classe 'active' au menu
+// Pour ajouter automatiquement la classe 'active' au menu
 const links = document.querySelectorAll("nav a");
 const currentUrl = window.location.href;
 
