@@ -100,14 +100,13 @@ nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
-
-nav a:actif {
-	font-weight: bold;
-}
-
 li:hover {
 	color: #B1663C;
 }
+a.active {
+	font-weight: bold;
+  }
+
 #introduction {
 	display: flex;
 	align-items: center;

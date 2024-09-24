@@ -42,7 +42,7 @@ async function getCategories() {
   //console.log(works);
   return categories;
 }
-//Fonction pour créer le container et les boutons 
+//Fonction pour créer le container et les boutons
 const containerCategories = document.querySelector(".categories");
 function createCategoryButton(category) {
   const button = document.createElement("button");
@@ -71,14 +71,24 @@ function handleSelectCategory(category) {
   // Sélectionne tous les boutons de catégorie
   const buttons = document.querySelectorAll(".button-category");
   // Ajoute un écouteur d'événement pour chaque bouton
-  buttons.forEach(button => {
+  buttons.forEach((button) => {
     button.addEventListener("click", () => {
       // Retire la classe 'active' de tous les boutons
-      buttons.forEach(btn => btn.classList.remove("active"));
+      buttons.forEach((btn) => btn.classList.remove("active"));
       // Ajoute la classe 'active' au bouton cliqué
       button.classList.add("active");
-    })
-  })
+    });
+  });
 }
+
+// JavaScript pour ajouter automatiquement la classe 'active' au menu
+const links = document.querySelectorAll("nav a");
+const currentUrl = window.location.href;
+
+links.forEach((link) => {
+  if (link.href === currentUrl) {
+    link.classList.add("active");
+  }
+});
 
 //fonction asynchrone pour permettre la connexion via le login et mot de passe
