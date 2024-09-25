@@ -9,10 +9,10 @@ async function getWorks() {
 
 // Fonction pour faire apparaître les différents projets avec les photos correspondantes
 async function displayWorks(category) {
-  const works = await getWorks(); // Attendez que les travaux soient récupérés
+  const works = await getWorks(); // Attendez que les projets soient récupérés
   const filteredData = category
     ? works.filter((work) => work.category.id === category.id)
-    : works; // Si category est null ou undefined, utilisez tous les travaux
+    : works; // Si category est null ou undefined, utilisez tous les projets
 
   gallery.innerHTML = ""; // Réinitialiser le contenu de la galerie
 
@@ -30,6 +30,9 @@ async function displayWorks(category) {
     gallery.appendChild(figureElement);
   }
 }
+
+
+
 
 // Fonction asynchrone pour récupérer les catégories
 async function getCategories() {
@@ -54,8 +57,8 @@ async function createFilters() {
   const categories = await getCategories();
   createCategoryButton(); // Créez le bouton "Tous" sans catégorie
 
-  // Afficher les travaux pour "Tous" lors du chargement
-  await displayWorks(null); // Passer null pour afficher tous les travaux
+  // Afficher les projets pour "Tous" lors du chargement
+  await displayWorks(null); // Passer null pour afficher tous les projets
 
   // Maintenant, mettez le bouton "Tous" comme actif
   const buttons = document.querySelectorAll(".button-category");
@@ -74,8 +77,8 @@ async function handleSelectCategory(category) {
   if (!category) {
     category = null; // "Tous" est représenté par null
   }
-  
-  await displayWorks(category); // Affichez les travaux en fonction de la catégorie
+
+  await displayWorks(category); // Affichez les projets en fonction de la catégorie
 
   const buttons = document.querySelectorAll(".button-category");
 
@@ -109,4 +112,46 @@ links.forEach((link) => {
   }
 });
 
-//fonction asynchrone pour permettre la connexion via le login et mot de passe
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+// Fonction pour permettre la connexion via le login et mot de passe (et stockage du token)
+async function connectForm(e) {
+  e.preventDefault(); // Empêche le rechargement de la page
+
+  // Récupère les valeurs d'email et de mot de passe du formulaire
+  const coupleEmailPassword = {
+    email: e.target.querySelector("[name=email]").value,
+    password: e.target.querySelector("[name=password]").value
+  };
+
+  // Envoie la requête de connexion
+  const reponse = await fetch("http://localhost:5678/api/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(coupleEmailPassword) // envoie en JSON l'email et le mot de passe
+  });
+
+  const errorMessage = document.querySelector('.error-message');
+
+  // Vérifie si la réponse est correcte
+  if (reponse.ok) {
+    const data = await reponse.json(); // Récupère les données du serveur (en JSON)
+
+    // Si la connexion est réussie
+    if (data.token) {
+      localStorage.setItem('token', data.token); // Stocke le token dans le localStorage
+      window.location.href = "index.html"; // Redirige vers la page d'accueil
+      
+    } else {
+      errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
+    }
+  } else {
+    errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
+  }
+}
+
+// Sélection du formulaire et ajout du gestionnaire d'événement
+document.querySelector(".login-form").addEventListener("submit", connectForm);
+
