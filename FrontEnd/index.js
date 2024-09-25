@@ -35,8 +35,6 @@ async function displayWorks(category) {
 }
 
 
-
-
 // Fonction asynchrone pour récupérer les catégories
 async function getCategories() {
   const reponse = await fetch("http://localhost:5678/api/categories");

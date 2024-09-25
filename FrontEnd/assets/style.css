@@ -270,3 +270,9 @@ footer nav ul {
 	text-decoration: underline;
 	margin-top: 3px;
 }
+
+/*add error-message*/
+.error-message {
+	color: red;
+	margin-bottom: 20px;
+}
