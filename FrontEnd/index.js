@@ -1,4 +1,7 @@
 const gallery = document.querySelector(".gallery");
+const logText = document.querySelector(".log-text");
+
+logText.innerHTML = "login";
 
 // Fonction asynchrone pour récupérer la liste des projets
 async function getWorks() {
@@ -142,6 +145,7 @@ async function connectForm(e) {
     // Si la connexion est réussie
     if (data.token) {
       localStorage.setItem('token', data.token); // Stocke le token dans le localStorage
+      logText.innerHTML = "logout";
       window.location.href = "index.html"; // Redirige vers la page d'accueil
       
     } else {
@@ -151,6 +155,30 @@ async function connectForm(e) {
     errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
   }
 }
+
+// Fonction pour mettre à jour le texte de connexion
+function updateLoginText() {
+  logText.innerHTML = localStorage.getItem('token') ? "logout" : "login";
+}
+
+// Fonction pour gérer la déconnexion
+function handleLogout() {
+  localStorage.removeItem('token'); // Supprime le token du localStorage
+  updateLoginText(); // Met à jour le texte
+}
+
+// Vérifie et met à jour le texte de connexion au chargement de la page
+window.onload = updateLoginText;
+
+// Ajoute un événement de clic sur le texte de connexion/déconnexion
+logText.addEventListener("click", () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    handleLogout(); // Déconnexion
+  } else {
+    document.querySelector(".login-form"); // Affiche le formulaire de connexion
+  }
+});
 
 // Sélection du formulaire et ajout du gestionnaire d'événement
 document.querySelector(".login-form").addEventListener("submit", connectForm);
