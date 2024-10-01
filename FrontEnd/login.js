@@ -36,3 +36,27 @@ async function connectForm(e) {
       errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
     }
   }
+
+  // Fonction pour mettre à jour le texte de connexion
+function updateLoginText() {
+    logText.innerHTML = token ? "logout" : "login";
+  }
+  
+  // Fonction pour gérer la déconnexion
+  function handleLogout() {
+    localStorage.removeItem('token'); // Supprime le token du localStorage
+    updateLoginText(); // Met à jour le texte
+  }
+  
+  // Vérifie et met à jour le texte de connexion au chargement de la page
+  window.onload = updateLoginText;
+  
+  // Ajoute un événement de clic sur le texte de connexion/déconnexion
+  logText.addEventListener("click", () => {
+    
+    if (token) {
+      handleLogout(); // Déconnexion
+    } else {
+      document.querySelector(".login-form"); // Affiche le formulaire de connexion
+    }
+  });
