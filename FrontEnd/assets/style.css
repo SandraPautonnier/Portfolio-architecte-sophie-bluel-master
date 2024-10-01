@@ -289,7 +289,6 @@ footer nav ul {
 	padding: 20px;
 	background-color: black;
 	color: white;
-	
 }
 
 .portfolio-header h2 {
@@ -303,6 +302,7 @@ footer nav ul {
 }
 .portfolio-edit {
 	display: none;
-	
-
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
 }

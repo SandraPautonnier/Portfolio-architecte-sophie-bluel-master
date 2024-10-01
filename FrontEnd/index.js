@@ -182,12 +182,14 @@ logText.addEventListener("click", () => {
 //Mode edition
 
 const editBanner = document.querySelector(".edit-banner");
+const header = document.querySelector("header")
 const portfolioEdit = document.querySelector(".portfolio-edit");
 
 window.onload = () => {
   updateLoginText();
   if (token) {
     editBanner.style.display = "flex";
+    header.style.marginTop = "70px";
     portfolioEdit.style.display = "block";
   }
   // Sélection du formulaire et ajout de l'événement
@@ -196,4 +198,3 @@ window.onload = () => {
     loginForm.addEventListener("submit", connectForm);
   }
 };
-
