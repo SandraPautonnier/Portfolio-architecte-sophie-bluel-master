@@ -1,5 +1,6 @@
 const gallery = document.querySelector(".gallery");
 const logText = document.querySelector(".log-text");
+const token = localStorage.getItem('token');
 
 logText.innerHTML = "login";
 
@@ -12,7 +13,7 @@ async function getWorks() {
 
 // Fonction pour faire apparaître les différents projets avec les photos correspondantes
 async function displayWorks(category) {
-  const works = await getWorks(); // Attendez que les projets soient récupérés
+  const works = await getWorks(); // Les projets sont récupérés
   const filteredData = category
     ? works.filter((work) => work.category.id === category.id)
     : works; // Si category est null ou undefined, utilisez tous les projets
@@ -21,7 +22,7 @@ async function displayWorks(category) {
 
   for (let i = 0; i < filteredData.length; i++) {
     const work = filteredData[i];
-    const figureElement = document.createElement("figure");
+    const figureElement = document.createElement("figure"); 
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
     imageElement.alt = work.title;
@@ -49,7 +50,7 @@ function createCategoryButton(category) {
   const button = document.createElement("button");
   button.className = `button-category ${!category ? "active" : ""}`; // Ajoutez "active" pour le bouton "Tous"
   button.textContent = category ? category.name : "Tous";
-  button.addEventListener("click", () => handleSelectCategory(category));
+  button.addEventListener("click", () => handleSelectCategory(category)); 
   containerCategories.appendChild(button);
 }
 
@@ -115,48 +116,9 @@ links.forEach((link) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-// Fonction pour permettre la connexion via le login et mot de passe (et stockage du token)
-async function connectForm(e) {
-  e.preventDefault(); // Empêche le rechargement de la page
-
-  // Récupère les valeurs d'email et de mot de passe du formulaire
-  const coupleEmailPassword = {
-    email: e.target.querySelector("[name=email]").value,
-    password: e.target.querySelector("[name=password]").value
-  };
-
-  // Envoie la requête de connexion
-  const reponse = await fetch("http://localhost:5678/api/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(coupleEmailPassword) // envoie en JSON l'email et le mot de passe
-  });
-
-  const errorMessage = document.querySelector('.error-message');
-
-  // Vérifie si la réponse est correcte
-  if (reponse.ok) {
-    const data = await reponse.json(); // Récupère les données du serveur (en JSON)
-
-    // Si la connexion est réussie
-    if (data.token) {
-      localStorage.setItem('token', data.token); // Stocke le token dans le localStorage
-      logText.innerHTML = "logout";
-      window.location.href = "index.html"; // Redirige vers la page d'accueil
-      
-    } else {
-      errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
-    }
-  } else {
-    errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
-  }
-}
-
 // Fonction pour mettre à jour le texte de connexion
 function updateLoginText() {
-  logText.innerHTML = localStorage.getItem('token') ? "logout" : "login";
+  logText.innerHTML = token ? "logout" : "login";
 }
 
 // Fonction pour gérer la déconnexion
@@ -170,7 +132,7 @@ window.onload = updateLoginText;
 
 // Ajoute un événement de clic sur le texte de connexion/déconnexion
 logText.addEventListener("click", () => {
-  const token = localStorage.getItem('token');
+  
   if (token) {
     handleLogout(); // Déconnexion
   } else {
@@ -178,6 +140,23 @@ logText.addEventListener("click", () => {
   }
 });
 
-// Sélection du formulaire et ajout du gestionnaire d'événement
-document.querySelector(".login-form").addEventListener("submit", connectForm);
+
+
+//Mode edition
+
+const editBanner = document.querySelector(".edit-banner");
+const portfolioEdit = document.querySelector(".portfolio-edit");
+
+window.onload = () => {
+  updateLoginText();
+  if (token) {
+    editBanner.style.display = "flex";
+    portfolioEdit.style.display = "block";
+  }
+  // Sélection du formulaire et ajout de l'événement
+  const loginForm = document.querySelector(".login-form");
+  if(loginForm) {
+    loginForm.addEventListener("submit", connectForm);
+  }
+};
 

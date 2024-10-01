@@ -276,3 +276,33 @@ footer nav ul {
 	color: red;
 	margin-bottom: 20px;
 }
+
+
+.edit-banner {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	background-color: black;
+	color: white;
+	
+}
+
+.portfolio-header h2 {
+	margin: 0 !important;
+}
+.portfolio-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 30px;
+}
+.portfolio-edit {
+	display: none;
+	
+
+}
