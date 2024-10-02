@@ -310,7 +310,7 @@ footer nav ul {
 /*Modal*/
 .modal {
 	position: fixed;
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	top: 0;
@@ -320,10 +320,61 @@ footer nav ul {
 	background: rgba(0, 0, 0, 0.45);
 }
 .modal-content {
+	
 	overflow: auto;
 	width: 630px;
-	height: 688px;
-	padding: 70px;
+	height: 690px;
+	padding: 30px;
 	background-color: white;
 	border-radius: 10px;
+}
+
+.title-modal {
+	text-align: center;
+	font-size: 26px;
+	margin-top: 10px;
+	margin-bottom: 40px;
+}
+
+.close {
+    position: relative;
+    top: 0px;
+    right: -600px;
+    cursor: pointer;
+	font-size: 30px;
+}
+
+/* Cacher la vue ajout de projet par défaut */
+.hidden {
+    display: none;
+}
+
+.modal-view {
+	margin: 0px 50px;
+}
+
+.modal-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.modal-projects-grid figure {
+    position: relative;
+    text-align: center;
+}
+
+.modal-projects-grid img {
+    width: 80px;
+    
+}
+
+.modal-projects-grid i {
+    position: relative;
+	top: -150px;
+	right: -39px;
+	color: white;
+	background-color: black;
+	padding: 6px;
+	border-radius: 3px;
 }

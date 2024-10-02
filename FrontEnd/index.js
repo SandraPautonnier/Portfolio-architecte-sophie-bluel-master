@@ -1,6 +1,7 @@
 const gallery = document.querySelector(".gallery");
 const logText = document.querySelector(".log-text");
 const token = localStorage.getItem('token');
+const modalProjectsGrid = document.querySelector('.modal-projects-grid');
 
 logText.innerHTML = "login";
 
@@ -10,6 +11,7 @@ async function getWorks() {
   const works = await reponse.json();
   return works;
 }
+
 
 // Fonction pour faire apparaître les différents projets avec les photos correspondantes
 async function displayWorks(category) {
@@ -199,3 +201,52 @@ window.onload = () => {
   }
 };
 
+const openModal = document.querySelector(".modal");
+const closeModal = document.querySelector(".close");
+
+portfolioEdit.addEventListener("click", () => {
+  openModal.style.display = "flex";
+  displayModalProjects(); // Afficher les projets dans la modale
+});
+
+closeModal.addEventListener("click", () => {
+  openModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === openModal)
+  openModal.style.display = "none";
+});
+
+
+// Fonction pour afficher les projets dans la modale
+async function displayModalProjects() {
+  const works = await getWorks(); // Fonction pour récupérer les projets depuis l'API
+  
+  modalProjectsGrid.innerHTML = ""; // Vider la galerie avant d'ajouter les projets
+
+  works.forEach(work => {
+    const figureElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    imageElement.src = work.imageUrl;
+
+    const figCaptionElement = document.createElement("figcaption");
+
+    const deleteButton = document.createElement("i");
+    deleteButton.classList.add("fa-solid", "fa-trash-can");
+    deleteButton.classList.add("delete-project");
+
+    // Supprimer le projet via l'API et du DOM dans la modale
+    deleteButton.addEventListener('click', async () => {
+      if (confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
+        await deleteWork(work.id); // Fonction pour supprimer le projet de l'API
+        figureElement.remove(); // Retirer l'élément du DOM dans la modale
+      }
+    });
+
+    figureElement.appendChild(imageElement);
+    figureElement.appendChild(figCaptionElement);
+    figureElement.appendChild(deleteButton);
+    modalProjectsGrid.appendChild(figureElement);
+  });
+}

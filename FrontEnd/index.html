@@ -40,20 +40,18 @@
 		<div class="portfolio-header">
 			<h2>Mes Projets</h2>
 			<button type="button" class="portfolio-edit"><i class="fa-regular fa-pen-to-square"></i>&nbsp;modifier</button>
-			<a href=""></a>
 			<aside id="addProjectModal" class="modal" aria-hidden="true" role="dialog" >
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h3 class="title-modal">Galerie photo</h3>
 					<!-- Vue Galerie des projets -->
 					<div class="modal-view gallery-view">
-						<h4>Projets existants</h4>
 						<div class="modal-projects-grid"></div>
-						<button id="switchToAddView">Ajouter un nouveau projet</button>
+						<button class="add-new-project">Ajouter un nouveau projet</button>
 					</div>
 					<!-- Vue Ajout de projet -->
 					<div class="modal-view add-project-view hidden">
-						<form id="addProjectForm">
+						<form class="add-project-form">
 							<h4>Ajouter un nouveau projet</h4>
 							<label for="title">Titre</label>
 							<input type="text" id="title" name="title" required>
@@ -65,7 +63,7 @@
 							<input type="file" id="image" name="image" accept="image/*" required>
 							
 							<button type="submit">Ajouter le projet</button>
-							<button id="backToGallery">Retour à la galerie</button>
+							<button class="back-btn">Retour à la galerie</button>
 						</form>
 					</div>
 				</div>
