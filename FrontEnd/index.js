@@ -199,4 +199,3 @@ window.onload = () => {
   }
 };
 
-portfolioEdit.addEventListener("click", ())

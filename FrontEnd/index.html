@@ -43,9 +43,31 @@
 			<a href=""></a>
 			<aside id="addProjectModal" class="modal" aria-hidden="true" role="dialog" >
 				<div class="modal-content">
-					<h3 class="title-modal">TEST</h3>
-					<p></p>
-					<button class="modal-button"></button>
+					<span class="close">&times;</span>
+					<h3 class="title-modal">Galerie photo</h3>
+					<!-- Vue Galerie des projets -->
+					<div class="modal-view gallery-view">
+						<h4>Projets existants</h4>
+						<div class="modal-projects-grid"></div>
+						<button id="switchToAddView">Ajouter un nouveau projet</button>
+					</div>
+					<!-- Vue Ajout de projet -->
+					<div class="modal-view add-project-view hidden">
+						<form id="addProjectForm">
+							<h4>Ajouter un nouveau projet</h4>
+							<label for="title">Titre</label>
+							<input type="text" id="title" name="title" required>
+							
+							<label for="category">Catégorie</label>
+							<select id="category" name="category" required></select>
+			
+							<label for="image">Image</label>
+							<input type="file" id="image" name="image" accept="image/*" required>
+							
+							<button type="submit">Ajouter le projet</button>
+							<button id="backToGallery">Retour à la galerie</button>
+						</form>
+					</div>
 				</div>
 			</aside>
 		</div>
