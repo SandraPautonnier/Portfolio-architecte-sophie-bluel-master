@@ -1,7 +1,8 @@
 const gallery = document.querySelector(".gallery");
 const logText = document.querySelector(".log-text");
-const token = localStorage.getItem('token');
-const modalProjectsGrid = document.querySelector('.modal-projects-grid');
+const token = localStorage.getItem("token");
+const modalProjectsGrid = document.querySelector(".modal-projects-grid");
+let selectedCategory;
 
 logText.innerHTML = "login";
 
@@ -11,7 +12,6 @@ async function getWorks() {
   const works = await reponse.json();
   return works;
 }
-
 
 // Fonction pour faire apparaître les différents projets avec les photos correspondantes
 async function displayWorks(category) {
@@ -24,7 +24,7 @@ async function displayWorks(category) {
 
   for (let i = 0; i < filteredData.length; i++) {
     const work = filteredData[i];
-    const figureElement = document.createElement("figure"); 
+    const figureElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
     imageElement.alt = work.title;
@@ -36,7 +36,6 @@ async function displayWorks(category) {
     gallery.appendChild(figureElement);
   }
 }
-
 
 // Fonction asynchrone pour récupérer les catégories
 async function getCategories() {
@@ -52,7 +51,7 @@ function createCategoryButton(category) {
   const button = document.createElement("button");
   button.className = `button-category ${!category ? "active" : ""}`; // Ajoutez "active" pour le bouton "Tous"
   button.textContent = category ? category.name : "Tous";
-  button.addEventListener("click", () => handleSelectCategory(category)); 
+  button.addEventListener("click", () => handleSelectCategory(category));
   containerCategories.appendChild(button);
 }
 
@@ -64,7 +63,7 @@ async function createFilters() {
   // Afficher les projets pour "Tous" lors du chargement
   await displayWorks(null); // Passer null pour afficher tous les projets
 
-  // Maintenant, mettez le bouton "Tous" comme actif
+  // Mettre le bouton "Tous" comme actif
   const buttons = document.querySelectorAll(".button-category");
   buttons[0].classList.add("active"); // Activez le premier bouton qui est "Tous"
 
@@ -80,7 +79,10 @@ async function handleSelectCategory(category) {
   // Si "Tous" est sélectionné, passez null
   if (!category) {
     category = null; // "Tous" est représenté par null
+    selectedCategory = null;
   }
+
+  selectedCategory = category
 
   await displayWorks(category); // Affichez les projets en fonction de la catégorie
 
@@ -96,7 +98,8 @@ async function handleSelectCategory(category) {
     const button = buttons[i];
 
     // Vérifiez si le bouton correspond à category.name ou s'il est le bouton "Tous"
-    if (!category && button.textContent === "Tous") { // Vérifiez si la catégorie est null (pour le bouton "Tous")
+    if (!category && button.textContent === "Tous") {
+      // Vérifiez si la catégorie est null (pour le bouton "Tous")
       button.classList.add("active");
       break; // Sortir de la boucle une fois que le bon bouton est trouvé
     } else if (button.textContent === category.name) {
@@ -125,7 +128,7 @@ async function connectForm(e) {
   // Récupère les valeurs d'email et de mot de passe du formulaire
   const coupleEmailPassword = {
     email: e.target.querySelector("[name=email]").value,
-    password: e.target.querySelector("[name=password]").value
+    password: e.target.querySelector("[name=password]").value,
   };
 
   // Envoie la requête de connexion
@@ -134,10 +137,10 @@ async function connectForm(e) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(coupleEmailPassword) // envoie en JSON l'email et le mot de passe
+    body: JSON.stringify(coupleEmailPassword), // envoie en JSON l'email et le mot de passe
   });
 
-  const errorMessage = document.querySelector('.error-message');
+  const errorMessage = document.querySelector(".error-message");
 
   // Vérifie si la réponse est correcte
   if (reponse.ok) {
@@ -145,15 +148,16 @@ async function connectForm(e) {
 
     // Si la connexion est réussie
     if (data.token) {
-      localStorage.setItem('token', data.token); // Stocke le token dans le localStorage
+      localStorage.setItem("token", data.token); // Stocke le token dans le localStorage
       logText.innerHTML = "logout";
       window.location.href = "index.html"; // Redirige vers la page d'accueil
-      
     } else {
-      errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
+      errorMessage.innerHTML =
+        "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
     }
   } else {
-    errorMessage.innerHTML = "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
+    errorMessage.innerHTML =
+      "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
   }
 }
 
@@ -164,7 +168,7 @@ function updateLoginText() {
 
 // Fonction pour gérer la déconnexion
 function handleLogout() {
-  localStorage.removeItem('token'); // Supprime le token du localStorage
+  localStorage.removeItem("token"); // Supprime le token du localStorage
   updateLoginText(); // Met à jour le texte
 }
 
@@ -173,7 +177,6 @@ window.onload = updateLoginText;
 
 // Ajoute un événement de clic sur le texte de connexion/déconnexion
 logText.addEventListener("click", () => {
-  
   if (token) {
     handleLogout(); // Déconnexion
   } else {
@@ -184,8 +187,9 @@ logText.addEventListener("click", () => {
 //Mode edition
 
 const editBanner = document.querySelector(".edit-banner");
-const header = document.querySelector("header")
+const header = document.querySelector("header");
 const portfolioEdit = document.querySelector(".portfolio-edit");
+const titleProject = document.querySelector(".portfolio-header");
 
 window.onload = () => {
   updateLoginText();
@@ -193,10 +197,13 @@ window.onload = () => {
     editBanner.style.display = "flex";
     header.style.marginTop = "70px";
     portfolioEdit.style.display = "block";
+    containerCategories.style.display = "none";
+    titleProject.style.paddingBottom = "75px";
+    titleProject.style.paddingTop = "50px";
   }
   // Sélection du formulaire et ajout de l'événement
   const loginForm = document.querySelector(".login-form");
-  if(loginForm) {
+  if (loginForm) {
     loginForm.addEventListener("submit", connectForm);
   }
 };
@@ -214,18 +221,16 @@ closeModal.addEventListener("click", () => {
 });
 
 window.addEventListener("click", (e) => {
-  if (e.target === openModal)
-  openModal.style.display = "none";
+  if (e.target === openModal) openModal.style.display = "none";
 });
-
 
 // Fonction pour afficher les projets dans la modale
 async function displayModalProjects() {
   const works = await getWorks(); // Fonction pour récupérer les projets depuis l'API
-  
+
   modalProjectsGrid.innerHTML = ""; // Vider la galerie avant d'ajouter les projets
 
-  works.forEach(work => {
+  works.forEach((work) => {
     const figureElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
@@ -237,10 +242,13 @@ async function displayModalProjects() {
     deleteButton.classList.add("delete-project");
 
     // Supprimer le projet via l'API et du DOM dans la modale
-    deleteButton.addEventListener('click', async () => {
+    deleteButton.addEventListener("click", async () => {
       if (confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
-        await deleteWork(work.id); // Fonction pour supprimer le projet de l'API
-        figureElement.remove(); // Retirer l'élément du DOM dans la modale
+        const deleted = await deleteWork(work.id); // Fonction pour supprimer le projet de l'API
+        if (deleted) {
+          figureElement.remove(); // Retirer l'élément du DOM dans la modale
+          displayWorks(selectedCategory);
+        }
       }
     });
 
@@ -250,3 +258,9 @@ async function displayModalProjects() {
     modalProjectsGrid.appendChild(figureElement);
   });
 }
+
+async function deleteWork(workId) {
+  const reponse = await fetch(`http://localhost:5678/api/works/${workId}`, { method: 'DELETE', headers: {Authorization: `Bearer ${token}`} });
+  return reponse.ok;
+}
+

@@ -38,7 +38,7 @@
 	</section>
 	<section id="portfolio">
 		<div class="portfolio-header">
-			<h2>Mes Projets</h2>
+			<h2 class="title-project">Mes Projets</h2>
 			<button type="button" class="portfolio-edit"><i class="fa-regular fa-pen-to-square"></i>&nbsp;modifier</button>
 			<aside id="addProjectModal" class="modal" aria-hidden="true" role="dialog" >
 				<div class="modal-content">
@@ -47,22 +47,24 @@
 					<!-- Vue Galerie des projets -->
 					<div class="modal-view gallery-view">
 						<div class="modal-projects-grid"></div>
-						<button class="add-new-project">Ajouter un nouveau projet</button>
+						<hr />
+						<button class="add-new-project">Ajouter une photo</button>
 					</div>
 					<!-- Vue Ajout de projet -->
 					<div class="modal-view add-project-view hidden">
 						<form class="add-project-form">
-							<h4>Ajouter un nouveau projet</h4>
+							<h3 class="title-modal">Ajout photo</h3>
+
+							<label for="image">Ajouter photo</label>
+							<input type="file" id="image" name="image" accept="image/*" required>
+
 							<label for="title">Titre</label>
 							<input type="text" id="title" name="title" required>
 							
 							<label for="category">Catégorie</label>
 							<select id="category" name="category" required></select>
-			
-							<label for="image">Image</label>
-							<input type="file" id="image" name="image" accept="image/*" required>
 							
-							<button type="submit">Ajouter le projet</button>
+							<button type="submit">Valider</button>
 							<button class="back-btn">Retour à la galerie</button>
 						</form>
 					</div>
