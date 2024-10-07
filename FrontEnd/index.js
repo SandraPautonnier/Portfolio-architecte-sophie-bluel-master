@@ -195,7 +195,7 @@ window.onload = () => {
   updateLoginText();
   if (token) {
     editBanner.style.display = "flex";
-    header.style.marginTop = "70px";
+    header.style.marginTop = "100px";
     portfolioEdit.style.display = "block";
     containerCategories.style.display = "none";
     titleProject.style.paddingBottom = "75px";
@@ -210,14 +210,18 @@ window.onload = () => {
 
 const openModal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
+const footer = document.querySelector("footer");
+
 
 portfolioEdit.addEventListener("click", () => {
+  
   openModal.style.display = "flex";
   displayModalProjects(); // Afficher les projets dans la modale
 });
 
 closeModal.addEventListener("click", () => {
   openModal.style.display = "none";
+  footer.style.background = "none";
 });
 
 window.addEventListener("click", (e) => {

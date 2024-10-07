@@ -284,9 +284,10 @@ footer nav ul {
 	top: 0;
 	left: 0;
 	right: 0;
+	z-index: 10;
 	align-items: center;
 	justify-content: center;
-	padding: 20px;
+	height: 55px;
 	background-color: black;
 	color: white;
 }
@@ -318,6 +319,7 @@ footer nav ul {
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.45);
+	background-position: 0 55px;
 }
 .modal-content {
 	
@@ -373,19 +375,19 @@ footer nav ul {
 }
 
 .modal-projects-grid img {
-    width: 100%;
+    width: 77px;
 	height: 104px;
 	object-fit: cover;
-    
 }
 
 .modal-projects-grid i {
     position: absolute;
+	font-size: 10px;
 	top: 5px;
-	right: 5px;
+	right: 13px;
 	color: white;
 	background-color: black;
-	padding: 6px;
+	padding: 5px;
 	border-radius: 3px;
 }
 
@@ -407,4 +409,5 @@ footer nav ul {
 
 hr {
 	width: 100%;
+	margin-top: 70px;
 }
