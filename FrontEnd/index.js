@@ -268,3 +268,11 @@ async function deleteWork(workId) {
   return reponse.ok;
 }
 
+const addNewProject = document.querySelector("add-new-project");
+const addProjectView = document.querySelector(".hidden")
+
+addNewProject.addEventListener("click", () => {
+  addProjectView.style.display = "flex";
+
+  
+});
