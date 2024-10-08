@@ -43,29 +43,36 @@
 			<aside id="addProjectModal" class="modal" aria-hidden="true" role="dialog" >
 				<div class="modal-content">
 					<span class="close">&times;</span>
-					<h3 class="title-modal">Galerie photo</h3>
 					<!-- Vue Galerie des projets -->
 					<div class="modal-view gallery-view">
+						<h3 class="title-modal">Galerie photo</h3>
 						<div class="modal-projects-grid"></div>
 						<hr />
-						<button class="add-new-project">Ajouter une photo</button>
+						<button type="button" class="add-new-project">Ajouter une photo</button>
 					</div>
 					<!-- Vue Ajout de projet -->
 					<div class="modal-view add-project-view hidden">
 						<form class="add-project-form">
 							<h3 class="title-modal">Ajout photo</h3>
-
-							<label for="image">Ajouter photo</label>
-							<input type="file" id="image" name="image" accept="image/*" required>
-
-							<label for="title">Titre</label>
-							<input type="text" id="title" name="title" required>
 							
-							<label for="category">Catégorie</label>
-							<select id="category" name="category" required></select>
+							<label for="image" class="label-photo">
+								<i class="fa-regular fa-image"></i>
+								<span class="btn-add-photo">+ Ajouter photo</span>
+								<span class="des-add-photo">jpg, png : 4mo max</span>
+							</label>
+							<input type="file" id="image" name="image" accept=".jpg, .png" required>
+
+							<label for="title" class="title-input">Titre</label>
+							<input type="text" class="title shadow-border" name="title" required>
 							
+							<label for="category" class="title-input">Catégorie</label>
+							<select class="custom-select shadow-border" name="category" required>
+								<option value="1">Hotels & Restaurants</option>
+							</select>
+							<i class="fa fa-chevron-down"></i>
+							<hr />
 							<button type="submit" class="add-project-validate">Valider</button>
-							<button class="back-btn">Retour à la galerie</button>
+							<button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
 						</form>
 					</div>
 				</div>

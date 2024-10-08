@@ -268,11 +268,21 @@ async function deleteWork(workId) {
   return reponse.ok;
 }
 
-const addNewProject = document.querySelector("add-new-project");
-const addProjectView = document.querySelector(".hidden")
+const addNewProject = document.querySelector(".add-new-project"); //button afficher vue "Ajouter un projet"
+const addProjectView = document.querySelector(".add-project-view"); //Vue "Ajouter un projet"
+const addProjectForm = document.querySelector(".add-project-form"); //button enregistrer un projet
+const galleryView = document.querySelector(".gallery-view"); //Vue galerie
+const backToGalleryBtn = document.querySelector(".back-btn"); //button revenir à la gallerie
 
-addNewProject.addEventListener("click", () => {
-  addProjectView.style.display = "flex";
+// Basculer vers la vue "Ajouter un projet"
+addNewProject.addEventListener('click', () => {
+  galleryView.classList.add('hidden');
+  addProjectView.classList.remove('hidden');
+});
 
-  
+// Revenir à la vue galerie
+backToGalleryBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  galleryView.classList.remove('hidden');
+  addProjectView.classList.add('hidden');
 });
