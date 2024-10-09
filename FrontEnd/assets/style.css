@@ -330,7 +330,7 @@ footer nav ul {
 	padding: 30px;
 	background-color: white;
 	border-radius: 10px;
-	scrollbar-width: none; 
+	
 }
 
 .title-modal {
@@ -426,9 +426,9 @@ hr {
 
 .back-btn {
 
-	position: relative;
-	top: -670px;
-	right: 300px;
+	position: absolute;
+	top: 130px;
+	left: 277px;
 	border: none;
 	background: none;
 	font-size: 25px;
@@ -505,12 +505,11 @@ input[type="text"] {
 }
 
 .add-project-form .fa-chevron-down {
-	position: relative;
-	top: -32px;
-	right: -460px;
-	/*top: 645px;
-	right: 500px;*/
+	position: absolute;
+	top: 645px;
+	right: 380px;
 	color: #444444;
+	pointer-events: none; 
 	cursor: pointer;
 }
 
@@ -529,4 +528,23 @@ input[type="text"] {
 	height: 38px;
 	margin: 27px auto 0;
 	cursor: pointer;
+}
+
+.image-preview img {
+	display: none;
+	position: absolute;
+	top: 235px;
+	right: 50%;
+  	transform: translateX(50%);
+	height: 215px;
+	max-width: 510px;
+	object-fit: contain;
+}
+
+.rotate {
+	transform: rotate(180deg);
+}
+
+.message-form {
+	margin: 10px auto 0;
 }

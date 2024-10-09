@@ -61,18 +61,21 @@
 								<span class="des-add-photo">jpg, png : 4mo max</span>
 							</label>
 							<input type="file" id="image" name="image" accept=".jpg, .png" required>
+							<span class="image-preview">
+								<img id="imagePreview" src="" alt="Aperçu de l'image"/>
+							</span>
 
 							<label for="title" class="title-input">Titre</label>
-							<input type="text" class="title shadow-border" name="title" required>
+							<input type="text" class="title-project-form shadow-border" name="title" required>
 							
 							<label for="category" class="title-input">Catégorie</label>
 							<select class="custom-select shadow-border" name="category" required>
-								<option value="1">Hotels & Restaurants</option>
 							</select>
 							<i class="fa fa-chevron-down"></i>
 							<hr />
 							<button type="submit" class="add-project-validate">Valider</button>
 							<button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
+							<p class="message-form"></p>
 						</form>
 					</div>
 				</div>

@@ -2,6 +2,7 @@ const gallery = document.querySelector(".gallery");
 const logText = document.querySelector(".log-text");
 const token = localStorage.getItem("token");
 const modalProjectsGrid = document.querySelector(".modal-projects-grid");
+const categorySelect = document.querySelector(".custom-select");
 let selectedCategory;
 
 logText.innerHTML = "login";
@@ -184,7 +185,9 @@ logText.addEventListener("click", () => {
   }
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Mode edition
+//Ouverture et fermeture de la modale + Vue photo Galerie
 
 const editBanner = document.querySelector(".edit-banner");
 const header = document.querySelector("header");
@@ -208,10 +211,10 @@ window.onload = () => {
   }
 };
 
+//Ouvrir et fermer la modale
 const openModal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
 const footer = document.querySelector("footer");
-
 
 portfolioEdit.addEventListener("click", () => {
   
@@ -263,18 +266,28 @@ async function displayModalProjects() {
   });
 }
 
+//Fonction pour supprimer un projet
 async function deleteWork(workId) {
   const reponse = await fetch(`http://localhost:5678/api/works/${workId}`, { method: 'DELETE', headers: {Authorization: `Bearer ${token}`} });
   return reponse.ok;
 }
 
+
+//Vue Ajout photo
 const addNewProject = document.querySelector(".add-new-project"); //button afficher vue "Ajouter un projet"
 const addProjectView = document.querySelector(".add-project-view"); //Vue "Ajouter un projet"
-const addProjectForm = document.querySelector(".add-project-form"); //button enregistrer un projet
+const addProjectForm = document.querySelector(".add-project-form"); //Formulaire ajouter un projet
 const galleryView = document.querySelector(".gallery-view"); //Vue galerie
 const backToGalleryBtn = document.querySelector(".back-btn"); //button revenir à la gallerie
+const MessageForm = document.querySelector(".message-form");
+const btnProjectValidate = document.querySelector(".add-project-validate");//button Valider
+const titleProjectForm = document.querySelector(".title-project-form");//Titre du projet à ajouter
+const faChevronUp = document.querySelector(".fa-chevron-down"); //Chevron de select personnalisé
+const faImage = document.querySelector(".fa-image"); //icone image
+const btnAddPhoto = document.querySelector(".btn-add-photo") //bouton ajout photo
+const desAddPhoto = document.querySelector("des-add-photo") //description ajout photo
 
-// Basculer vers la vue "Ajouter un projet"
+// Basculer vers la vue Ajout photo
 addNewProject.addEventListener('click', () => {
   galleryView.classList.add('hidden');
   addProjectView.classList.remove('hidden');
@@ -285,4 +298,102 @@ backToGalleryBtn.addEventListener('click', (e) => {
   e.preventDefault();
   galleryView.classList.remove('hidden');
   addProjectView.classList.add('hidden');
+});
+
+//Afficher la photo télécharger depuis le PC
+const imageInput = document.getElementById("image");
+const imagePreview = document.getElementById("imagePreview");
+
+imageInput.addEventListener("change", function () {
+  const file = imageInput.files[0];
+
+  // Si un fichier est sélectionné et que c'est une image
+  if (file && file.type.startsWith("image/")) {
+    const reader = new FileReader();
+
+    // Quand le fichier est chargé, on l'affiche dans l'élément <img>
+    reader.onload = function (e) {
+      imagePreview.src = e.target.result; // Définit la source de l'image
+      imagePreview.style.display = "block"; // Affiche l'élément <img>
+      
+      //Fais disparaître les éléments derrière la prévisualisation de l'image
+      faImage.style.color = "transparent";
+      btnAddPhoto.style.backgroundColor = "transparent"; 
+      btnAddPhoto.style.color = "transparent";
+      desAddPhoto.style.color = "transparent";
+    };
+
+    reader.readAsDataURL(file); // Lit le fichier et génère une URL
+  } else {
+    imagePreview.style.display = "none"; // Cache l'aperçu si ce n'est pas une image
+  }
+});
+
+
+//Fonction pour l'élément select avec les catégories
+async function createCategoriesSelect() {
+  const reponse = await fetch("http://localhost:5678/api/categories");
+  const categories = await reponse.json();
+  const categorySelect = document.querySelector(".custom-select");
+
+  // Ajouter une option vide par défaut
+  const emptyOption = document.createElement("option");
+  emptyOption.value = "";
+  emptyOption.textContent = "";
+  categorySelect.appendChild(emptyOption);
+
+  // Ajouter chaque catégorie dans le champ select
+  categories.forEach((category) => {
+    const option = document.createElement("option");
+    option.value = category.id;  // La valeur est l'ID de la catégorie
+    option.textContent = category.name;  // Le texte affiché est le nom de la catégorie
+    categorySelect.appendChild(option);
+  });
+}
+
+// Appel de la fonction pour remplir les catégories au chargement
+createCategoriesSelect();
+
+//Lorsqu'on clique sur select le chevron change de sens
+categorySelect.addEventListener("click", () => {
+  faChevronUp.classList.toggle('rotate');
+} )
+
+//Changement de couleur du bouton "Valider" une fois que l'image, le titre et la catégorie est remplis
+addProjectForm.addEventListener("change", function () {
+  // Vérifie si tous les champs sont remplis et la catégorie est sélectionnée
+  if (categorySelect.value !== "" && titleProjectForm.value && imagePreview.src) {
+    btnProjectValidate.style.backgroundColor = "#1D6154"; // Vert
+  } else {
+    btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Gris
+  }
+});
+
+//Ajout des nouveaux projets dans l'API
+addProjectForm.addEventListener("submit", async (e) => {
+  e.preventDefault(); // Empêche le rechargement de la page
+
+  const formData = new FormData(addProjectForm);
+
+  try {
+    const reponse = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {Authorization: `Bearer ${token}`},
+        body: formData
+    });
+
+    if (reponse.ok) {
+        const newProject = await reponse.json(); // Projet ajouté avec succès
+        getWorks(newProject); // Ajoute le nouveau projet à la galerie
+        addProjectForm.reset(); // Réinitialise le formulaire après envoi
+        imagePreview.style.display = "none"; // Fais disparaître la previsualisation de l'image
+        btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Remet le bouton "Valider" en gris
+        MessageForm.innerHTML = "Projet ajouté avec succès, veuillez recharger la page !"
+        MessageForm.style.color = "#008000";
+    } else {
+        MessageForm.innerHTML = "Erreur lors de l'ajout du projet. Veuillez vérifier les informations.";
+    }
+  } catch (error) {
+    MessageForm.innerHTML = "<strong>Une erreur est survenue. Veuillez réessayer plus tard.</strong>";
+  }
 });
