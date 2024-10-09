@@ -279,13 +279,13 @@ const addProjectView = document.querySelector(".add-project-view"); //Vue "Ajout
 const addProjectForm = document.querySelector(".add-project-form"); //Formulaire ajouter un projet
 const galleryView = document.querySelector(".gallery-view"); //Vue galerie
 const backToGalleryBtn = document.querySelector(".back-btn"); //button revenir à la gallerie
-const MessageForm = document.querySelector(".message-form");
+const messageForm = document.querySelector(".message-form");
 const btnProjectValidate = document.querySelector(".add-project-validate");//button Valider
 const titleProjectForm = document.querySelector(".title-project-form");//Titre du projet à ajouter
 const faChevronUp = document.querySelector(".fa-chevron-down"); //Chevron de select personnalisé
 const faImage = document.querySelector(".fa-image"); //icone image
 const btnAddPhoto = document.querySelector(".btn-add-photo") //bouton ajout photo
-const desAddPhoto = document.querySelector("des-add-photo") //description ajout photo
+const desAddPhoto = document.querySelector(".des-add-photo") //description ajout photo
 
 // Basculer vers la vue Ajout photo
 addNewProject.addEventListener('click', () => {
@@ -315,7 +315,7 @@ imageInput.addEventListener("change", function () {
     reader.onload = function (e) {
       imagePreview.src = e.target.result; // Définit la source de l'image
       imagePreview.style.display = "block"; // Affiche l'élément <img>
-      
+
       //Fais disparaître les éléments derrière la prévisualisation de l'image
       faImage.style.color = "transparent";
       btnAddPhoto.style.backgroundColor = "transparent"; 
@@ -359,41 +359,65 @@ categorySelect.addEventListener("click", () => {
   faChevronUp.classList.toggle('rotate');
 } )
 
-//Changement de couleur du bouton "Valider" une fois que l'image, le titre et la catégorie est remplis
+// Fonction pour vérifier si tous les champs sont remplis
+function isFormValid() {
+  return categorySelect.value !== "" && titleProjectForm.value.trim() !== "" && imageInput.files.length > 0;
+}
+
+// Changement de couleur du bouton "Valider" une fois que l'image, le titre et la catégorie sont remplis
 addProjectForm.addEventListener("change", function () {
-  // Vérifie si tous les champs sont remplis et la catégorie est sélectionnée
-  if (categorySelect.value !== "" && titleProjectForm.value && imagePreview.src) {
+  if (isFormValid()) {
     btnProjectValidate.style.backgroundColor = "#1D6154"; // Vert
   } else {
     btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Gris
   }
 });
 
-//Ajout des nouveaux projets dans l'API
+// Ajout des nouveaux projets dans l'API
 addProjectForm.addEventListener("submit", async (e) => {
   e.preventDefault(); // Empêche le rechargement de la page
 
+  // Crée un objet FormData pour envoyer les données du formulaire
   const formData = new FormData(addProjectForm);
 
-  try {
-    const reponse = await fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {Authorization: `Bearer ${token}`},
-        body: formData
-    });
+  const reponse = await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData
+  });
 
-    if (reponse.ok) {
-        const newProject = await reponse.json(); // Projet ajouté avec succès
-        getWorks(newProject); // Ajoute le nouveau projet à la galerie
-        addProjectForm.reset(); // Réinitialise le formulaire après envoi
-        imagePreview.style.display = "none"; // Fais disparaître la previsualisation de l'image
-        btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Remet le bouton "Valider" en gris
-        MessageForm.innerHTML = "Projet ajouté avec succès, veuillez recharger la page !"
-        MessageForm.style.color = "#008000";
-    } else {
-        MessageForm.innerHTML = "Erreur lors de l'ajout du projet. Veuillez vérifier les informations.";
-    }
-  } catch (error) {
-    MessageForm.innerHTML = "<strong>Une erreur est survenue. Veuillez réessayer plus tard.</strong>";
+  // Réinitialise le message d'erreur
+  messageForm.innerHTML = ""; 
+  messageForm.style.color = "";
+
+  for (let i = 0; i < addProjectForm.length; i++) {
+    // Vérifie si le formulaire est valide avant l'envoi
+  if (!isFormValid() && !reponse.ok) {
+    // Affiche le message d'erreur
+    messageForm.innerHTML = "Veuillez remplir tous les champs !";
+    messageForm.style.color = "red";
+    return; // Arrête la soumission si le formulaire n'est pas valide
+  }
+
+  if (isFormValid && reponse.ok) {
+    const newProject = await reponse.json(); // Projet ajouté avec succès
+    getWorks(newProject); // Ajoute le nouveau projet à la galerie
+    addProjectForm.reset(); // Réinitialise le formulaire après envoi
+    imagePreview.style.display = "none"; // Fais disparaître la prévisualisation de l'image
+    btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Remet le bouton "Valider" en gris
+    messageForm.innerHTML = "Projet ajouté avec succès, veuillez recharger la page !";
+    messageForm.style.color = "#008000";
+
+    // Fais réapparaître les éléments derrière la prévisualisation de l'image
+    faImage.style.color = "#cbd6dc";
+    btnAddPhoto.style.backgroundColor = "#cbd6dc";
+    btnAddPhoto.style.color = "#306685";
+    desAddPhoto.style.color = "#444444";
+  } else {
+    messageForm.innerHTML = "Erreur lors de l'ajout du projet.";
+    messageForm.style.color = "red";
+  }
   }
 });
+
+
