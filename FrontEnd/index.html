@@ -59,19 +59,24 @@
 								<i class="fa-regular fa-image"></i>
 								<span class="btn-add-photo">+ Ajouter photo</span>
 								<span class="des-add-photo">jpg, png : 4mo max</span>
+								<span class="image-preview">
+									<img id="imagePreview" src="" alt="Aperçu de l'image"/>
+								</span>
 							</label>
-							<input type="file" id="image" name="image" accept=".jpg, .png" required>
-							<span class="image-preview">
-								<img id="imagePreview" src="" alt="Aperçu de l'image"/>
-							</span>
+							<input type="file" id="image" name="image" accept=".jpg, .png">
+							
 
 							<label for="title" class="title-input">Titre</label>
-							<input type="text" class="title-project-form shadow-border" name="title" required>
+							<input type="text" class="title-project-form shadow-border" name="title">
 							
 							<label for="category" class="title-input">Catégorie</label>
-							<select class="custom-select shadow-border" name="category" required>
-							</select>
-							<i class="fa fa-chevron-down"></i>
+							<div class="select-container">
+								<select class="custom-select shadow-border" name="category">
+								</select>
+								<i class="fa fa-chevron-down"></i>
+							</div>
+							
+							
 							<hr />
 							<button type="submit" class="add-project-validate">Valider</button>
 							<button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>

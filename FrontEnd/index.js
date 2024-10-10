@@ -217,9 +217,9 @@ const closeModal = document.querySelector(".close");
 const footer = document.querySelector("footer");
 
 portfolioEdit.addEventListener("click", () => {
-  
   openModal.style.display = "flex";
   displayModalProjects(); // Afficher les projets dans la modale
+  openModal.style.backgroundPositionY = "-50px"
 });
 
 closeModal.addEventListener("click", () => {
@@ -336,12 +336,6 @@ async function createCategoriesSelect() {
   const categories = await reponse.json();
   const categorySelect = document.querySelector(".custom-select");
 
-  // Ajouter une option vide par défaut
-  const emptyOption = document.createElement("option");
-  emptyOption.value = "";
-  emptyOption.textContent = "";
-  categorySelect.appendChild(emptyOption);
-
   // Ajouter chaque catégorie dans le champ select
   categories.forEach((category) => {
     const option = document.createElement("option");
@@ -361,7 +355,7 @@ categorySelect.addEventListener("click", () => {
 
 // Fonction pour vérifier si tous les champs sont remplis
 function isFormValid() {
-  return categorySelect.value !== "" && titleProjectForm.value.trim() !== "" && imageInput.files.length > 0;
+  return categorySelect.value && titleProjectForm.value && imageInput.files[0];;
 }
 
 // Changement de couleur du bouton "Valider" une fois que l'image, le titre et la catégorie sont remplis
@@ -389,35 +383,24 @@ addProjectForm.addEventListener("submit", async (e) => {
   // Réinitialise le message d'erreur
   messageForm.innerHTML = ""; 
   messageForm.style.color = "";
-
-  for (let i = 0; i < addProjectForm.length; i++) {
-    // Vérifie si le formulaire est valide avant l'envoi
-  if (!isFormValid() && !reponse.ok) {
-    // Affiche le message d'erreur
-    messageForm.innerHTML = "Veuillez remplir tous les champs !";
-    messageForm.style.color = "red";
-    return; // Arrête la soumission si le formulaire n'est pas valide
+  if (!isFormValid) {
+    return alert("Veuillez remplir tous les champs !");
   }
-
-  if (isFormValid && reponse.ok) {
-    const newProject = await reponse.json(); // Projet ajouté avec succès
-    getWorks(newProject); // Ajoute le nouveau projet à la galerie
+  if (!reponse.ok) {
+    return alert("Veuillez remplir tous les champs !");
+  }
+    displayWorks(selectedCategory);
     addProjectForm.reset(); // Réinitialise le formulaire après envoi
     imagePreview.style.display = "none"; // Fais disparaître la prévisualisation de l'image
     btnProjectValidate.style.backgroundColor = "#A7A7A7"; // Remet le bouton "Valider" en gris
-    messageForm.innerHTML = "Projet ajouté avec succès, veuillez recharger la page !";
-    messageForm.style.color = "#008000";
-
+    openModal.style.display = "none";
+    alert("Projet ajouté avec succès !")
     // Fais réapparaître les éléments derrière la prévisualisation de l'image
     faImage.style.color = "#cbd6dc";
     btnAddPhoto.style.backgroundColor = "#cbd6dc";
     btnAddPhoto.style.color = "#306685";
     desAddPhoto.style.color = "#444444";
-  } else {
-    messageForm.innerHTML = "Erreur lors de l'ajout du projet.";
-    messageForm.style.color = "red";
   }
-  }
-});
+);
 
 
