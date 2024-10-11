@@ -153,8 +153,7 @@ async function connectForm(e) {
       logText.innerHTML = "logout";
       window.location.href = "index.html"; // Redirige vers la page d'accueil
     } else {
-      errorMessage.innerHTML =
-        "<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
+      errorMessage.innerHTML ="<strong>Erreur dans l’identifiant ou le mot de passe</strong>";
     }
   } else {
     errorMessage.innerHTML =
@@ -219,7 +218,6 @@ const footer = document.querySelector("footer");
 portfolioEdit.addEventListener("click", () => {
   openModal.style.display = "flex";
   displayModalProjects(); // Afficher les projets dans la modale
-  openModal.style.backgroundPositionY = "-50px"
 });
 
 closeModal.addEventListener("click", () => {
@@ -279,7 +277,6 @@ const addProjectView = document.querySelector(".add-project-view"); //Vue "Ajout
 const addProjectForm = document.querySelector(".add-project-form"); //Formulaire ajouter un projet
 const galleryView = document.querySelector(".gallery-view"); //Vue galerie
 const backToGalleryBtn = document.querySelector(".back-btn"); //button revenir à la gallerie
-const messageForm = document.querySelector(".message-form");
 const btnProjectValidate = document.querySelector(".add-project-validate");//button Valider
 const titleProjectForm = document.querySelector(".title-project-form");//Titre du projet à ajouter
 const faChevronUp = document.querySelector(".fa-chevron-down"); //Chevron de select personnalisé
@@ -355,7 +352,7 @@ categorySelect.addEventListener("click", () => {
 
 // Fonction pour vérifier si tous les champs sont remplis
 function isFormValid() {
-  return categorySelect.value && titleProjectForm.value && imageInput.files[0];;
+  return categorySelect.value && titleProjectForm.value && imageInput.files[0];
 }
 
 // Changement de couleur du bouton "Valider" une fois que l'image, le titre et la catégorie sont remplis
@@ -380,9 +377,6 @@ addProjectForm.addEventListener("submit", async (e) => {
     body: formData
   });
 
-  // Réinitialise le message d'erreur
-  messageForm.innerHTML = ""; 
-  messageForm.style.color = "";
   if (!isFormValid) {
     return alert("Veuillez remplir tous les champs !");
   }
@@ -404,3 +398,6 @@ addProjectForm.addEventListener("submit", async (e) => {
 );
 
 
+/* Nous aurions pu améliorer l'expérience utilisateur en ajoutant une fonctionnalité 
+de mise en avant de certains projets avec un système de drag & drop, 
+ou encore une fonctionnalité de favoris*/
