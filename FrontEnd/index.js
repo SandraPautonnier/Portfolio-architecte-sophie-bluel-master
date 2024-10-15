@@ -19,7 +19,7 @@ async function displayWorks(category) {
   const works = await getWorks(); // Les projets sont récupérés
   const filteredData = category
     ? works.filter((work) => work.category.id === category.id)
-    : works; // Si category est null ou undefined, utilisez tous les projets
+    : works; // Si category est null ou undefined, met tous les projets
 
   gallery.innerHTML = ""; // Réinitialiser le contenu de la galerie
 
@@ -50,7 +50,7 @@ const containerCategories = document.querySelector(".categories");
 
 function createCategoryButton(category) {
   const button = document.createElement("button");
-  button.className = `button-category ${!category ? "active" : ""}`; // Ajoutez "active" pour le bouton "Tous"
+  button.className = `button-category ${!category ? "active" : ""}`; // Ajoute "active" pour le bouton "Tous"
   button.textContent = category ? category.name : "Tous";
   button.addEventListener("click", () => handleSelectCategory(category));
   containerCategories.appendChild(button);
@@ -59,7 +59,7 @@ function createCategoryButton(category) {
 // Fonction pour créer les filtres des catégories
 async function createFilters() {
   const categories = await getCategories();
-  createCategoryButton(); // Créez le bouton "Tous" sans catégorie
+  createCategoryButton(); // Crée le bouton "Tous" sans catégorie
 
   // Afficher les projets pour "Tous" lors du chargement
   await displayWorks(null); // Passer null pour afficher tous les projets
@@ -98,9 +98,9 @@ async function handleSelectCategory(category) {
   for (let i = 0; i < buttons.length; i++) {
     const button = buttons[i];
 
-    // Vérifiez si le bouton correspond à category.name ou s'il est le bouton "Tous"
+    // Vérifie si le bouton correspond à category.name ou s'il est le bouton "Tous"
     if (!category && button.textContent === "Tous") {
-      // Vérifiez si la catégorie est null (pour le bouton "Tous")
+      // Vérifie si la catégorie est null (pour le bouton "Tous")
       button.classList.add("active");
       break; // Sortir de la boucle une fois que le bon bouton est trouvé
     } else if (button.textContent === category.name) {
